@@ -3,395 +3,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forma - Pricing Plans</title>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Playfair+Display:ital,wght@1,700;1,900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-        @keyframes premiumPopup {
-            0% { opacity: 0; transform: scale(0.96) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+        :root {
+            --accent: #d4af37;
+            --bg: #0a0a08;
+            --glass-border: rgba(212, 175, 55, 0.2);
+            --glass-dark: rgba(20, 20, 18, 0.95);
+            --fluid-curve: cubic-bezier(0.19, 1, 0.22, 1);
+            --easter-glow: rgba(212, 175, 55, 0.6);
         }
 
-        .animate-popup {
-            animation: premiumPopup 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body {
-            background-color: #0b0b0f; 
-            font-family: 'Inter', sans-serif;
-            color: #FFFFFF;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-            min-height: 100vh;
+            margin: 0; padding: 0;
+            background: var(--bg);
+            color: #fffaf0; font-family: 'Montserrat', sans-serif;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; overflow-x: hidden;
+            transition: background 0.5s ease;
         }
 
-        body::after {
-            content: '';
+        /* --- TIP TOAST STYLE --- */
+        .tip-toast {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2000&auto=format&fit=crop') no-repeat center center;
-            background-size: cover;
-            z-index: -2;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(11, 11, 15, 0.4); 
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            z-index: -1;
-        }
-
-        .gradient-wrapper {
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 60px; 
-            padding-bottom: 120px;
-            flex-grow: 1;
-            z-index: 1;
-        }
-
-        .container {
-            max-width: 920px;
-            width: 100%;
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .page-title {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-align: center;
-            letter-spacing: -0.03em;
-            background: linear-gradient(135deg, #ffffff 40%, #a1a1a6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .page-subtitle {
-            font-size: 15px;
-            color: #E2E2E7;
-            margin-bottom: 50px;
-            text-align: center;
-            max-width: 500px;
-            line-height: 1.5;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 25px;
-            width: 100%;
-            margin-bottom: 60px;
-            align-items: stretch;
-        }
-
-        .pricing-card {
-            background: linear-gradient(135deg, rgba(18, 18, 24, 0.85) 0%, rgba(8, 8, 14, 0.75) 100%);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-radius: 24px;
-            padding: 40px 25px 35px 25px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-        }
-
-        .pricing-card.starter-tier { border: 1px solid rgba(48, 213, 200, 0.25); }
-        .pricing-card.starter-tier:hover {
-            transform: translateY(-8px);
-            border-color: rgba(48, 213, 200, 0.7);
-            box-shadow: 0 25px 50px rgba(48, 213, 200, 0.15);
-        }
-
-        .pricing-card.pro-tier {
-            border: 1px solid rgba(0, 113, 227, 0.35);
-            transform: scale(1.03);
-        }
-        .pricing-card.pro-tier:hover {
-            transform: scale(1.03) translateY(-8px);
-            border-color: rgba(0, 113, 227, 0.8);
-            box-shadow: 0 25px 50px rgba(0, 113, 227, 0.2);
-        }
-
-        .pricing-card.team-tier { border: 1px solid rgba(157, 78, 221, 0.3); }
-        .pricing-card.team-tier:hover {
-            transform: translateY(-8px);
-            border-color: rgba(157, 78, 221, 0.7);
-            box-shadow: 0 25px 50px rgba(157, 78, 221, 0.15);
-        }
-
-        .best-for-badge {
-            position: absolute;
-            top: -12px;
+            bottom: 30px;
             left: 50%;
-            transform: translateX(-50%);
-            padding: 5px 16px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            white-space: nowrap;
-        }
-        .starter-tier .best-for-badge { background: #143a35; border: 1px solid #30D5C8; color: #30D5C8; }
-        .pro-tier .best-for-badge { background: linear-gradient(90deg, #0071e3, #3399FF); color: #ffffff; }
-        .team-tier .best-for-badge { background: #24123a; border: 1px solid #9d4ede; color: #b771f4; }
-
-        .plan-name { font-size: 20px; font-weight: 700; margin-bottom: 12px; text-align: center; }
-        .plan-price { font-size: 38px; font-weight: 800; margin-bottom: 25px; text-align: center; }
-        .plan-price span { font-size: 14px; font-weight: 500; color: #A1A1A6; }
-
-        .plan-features-short { list-style: none; margin-bottom: 35px; flex-grow: 1; }
-        .plan-features-short li { font-size: 14px; color: #E2E2E7; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
-        .starter-tier .plan-features-short li::before { content: "✓"; color: #30D5C8; font-weight: 800; }
-        .pro-tier .plan-features-short li::before { content: "✓"; color: #3399FF; font-weight: 800; }
-        .team-tier .plan-features-short li::before { content: "✓"; color: #9d4ede; font-weight: 800; }
-
-        .checkout-btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            border: none;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-align: center;
-        }
-        .checkout-btn:active { transform: scale(0.97); }
-
-        .starter-tier .checkout-btn { background: rgba(48, 213, 200, 0.15); border: 1px solid #30D5C8; color: #30D5C8; }
-        .starter-tier .checkout-btn:hover { background: #30D5C8; color: #000; }
-        .pro-tier .checkout-btn { background: linear-gradient(90deg, #0071e3, #3399FF); box-shadow: 0 4px 20px rgba(0, 113, 227, 0.3); }
-        .pro-tier .checkout-btn:hover { filter: brightness(1.15); box-shadow: 0 6px 24px rgba(0, 113, 227, 0.5); }
-        .team-tier .checkout-btn { background: rgba(157, 78, 221, 0.15); border: 1px solid #9d4ede; color: #b771f4; }
-        .team-tier .checkout-btn:hover { background: #9d4ede; color: #fff; }
-
-        .section-title { font-size: 24px; font-weight: 700; margin: 50px 0 25px 0; letter-spacing: -0.01em; }
-        .checklist-table-wrapper {
-            width: 100%;
-            background: linear-gradient(135deg, rgba(15, 15, 20, 0.75) 0%, rgba(5, 5, 10, 0.65) 100%);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 50px;
-        }
-        .checklist-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-        .checklist-table th, .checklist-table td { padding: 18px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
-        .checklist-table th { background: rgba(0, 0, 0, 0.4); font-weight: 600; color: #ffffff; }
-        .checklist-table td:not(:first-child), .checklist-table th:not(:first-child) { text-align: center; }
-        .checklist-table tr:last-child td { border-bottom: none; }
-        .check-icon { font-weight: bold; }
-        .starter-check { color: #30D5C8; }
-        .pro-check { color: #3399FF; }
-        .team-check { color: #9d4ede; }
-        .dash-icon { color: #48484a; }
-
-        .faq-section { width: 100%; max-width: 750px; margin-bottom: 40px; }
-        .faq-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 22px;
-            margin-bottom: 14px;
-        }
-        .faq-item h4 { font-size: 16px; margin-bottom: 8px; color: #ffffff; }
-        .faq-item p { font-size: 14px; color: #A1A1A6; line-height: 1.5; }
-
-        .site-footer { width: 100%; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 30px; margin-top: 40px; text-align: center; }
-        .site-footer p { font-size: 13px; color: #8E8E93; font-weight: 500; }
-
-        /* TOAST STYLE BLOCK FROM BASELINE REFERENCED LAYOUT */
-        .premium-toast {
-            position: absolute;
-            bottom: 24px;
-            left: 24px;
-            width: 310px;
-            background: rgba(18, 18, 24, 0.94);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 16px;
-            padding: 16px 20px;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(20, 20, 18, 0.9);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 12px 24px;
+            border-radius: 50px;
             display: flex;
             align-items: center;
-            gap: 14px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            gap: 12px;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.8s var(--fluid-curve), opacity 0.5s;
             opacity: 0;
-            transform: translateX(-40px);
             pointer-events: none;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
 
-        .premium-toast.show {
+        .tip-toast.show {
+            transform: translateX(-50%) translateY(0);
             opacity: 1;
-            transform: translateX(0);
-            pointer-events: auto;
+            pointer-events: all;
         }
 
-        .toast-err-icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 59, 48, 0.12);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 59, 48, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .tip-icon { color: var(--accent); display: flex; align-items: center; }
+        .tip-content { font-size: 0.75rem; letter-spacing: 1px; font-weight: 500; color: #fff; }
+        .tip-close { cursor: pointer; opacity: 0.5; transition: 0.3s; padding-left: 5px; }
+        .tip-close:hover { opacity: 1; color: var(--accent); }
+
+        /* --- THE GOLDEN SWEEP ANIMATION --- */
+        @keyframes sweep {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .site-bg-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100vh;
+            z-index: -2; overflow: hidden;
+            background-color: var(--bg);
+        }
+
+        .site-bg {
+            position: absolute; top: -15%; left: -5%;
+            width: 110%; height: 130%; 
+            background-image: 
+                linear-gradient(rgba(10, 10, 8, 0.8), rgba(10, 10, 8, 0.95)),
+                url('https://raw.githubusercontent.com/ZombieArmor9212/g-advocacy-site/main/images/boat-sea.png');
+            background-size: cover; background-position: center center;
+            will-change: transform;
+        }
+
+        .title-section { 
+            text-align: center; margin-top: 60px; 
+            opacity: 0; transform: translateY(-20px);
+            animation: fadeInDown 1.35s var(--fluid-curve) forwards;
+        }
+
+        @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- TITLE SHINE --- */
+        h1 {
+            font-family: 'Playfair Display', serif; font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 900; font-style: italic; margin: 0;
+            background: linear-gradient(to bottom, #fffaf0, #d4af37);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: "";
+            position: absolute; top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.4), transparent);
+            transform: skewX(-25deg);
+            animation: sweep 2s ease-in-out 0.5s forwards;
+            pointer-events: none;
+        }
+        
+        .secret-trigger { 
+            position: fixed; bottom: 20px; right: 20px; 
+            z-index: 1002; cursor: pointer; opacity: 0.3; 
+            transition: 0.3s; width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .secret-trigger:hover { opacity: 0.8; transform: scale(1.1); }
+        .secret-trigger svg { fill: var(--accent); }
+
+        .title-tag { font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; font-weight: 700; }
+
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 40px 20px; width: 100%; max-width: 1200px; }
+
+        /* --- CARD SHINE --- */
+        .card {
+            background: rgba(20, 20, 18, 0.7); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 28px;
+            padding: 35px 25px; width: 280px; text-align: center; cursor: pointer;
+            z-index: 1; display: flex; flex-direction: column; align-items: center;
+            position: relative; opacity: 0; transform: translateY(40px) scale(0.9);
+            transition: transform 0.8s var(--fluid-curve), opacity 0.6s ease, border-color 0.4s ease;
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: "";
+            position: absolute; top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.15), transparent);
+            transform: skewX(-25deg);
+            pointer-events: none;
+        }
+
+        .card.reveal.do-sweep::after {
+            animation: sweep 1.5s ease-in-out forwards;
+        }
+
+        .card.reveal { opacity: 1; transform: translateY(0) scale(1); }
+        .card:hover:not(.active) { transform: translateY(-10px); border-color: var(--accent); }
+
+        .card.active {
+            width: 650px; height: auto; min-height: 320px;
+            flex-direction: row; text-align: left;
+            align-items: center; padding: 30px 40px;
+            cursor: default; z-index: 2000;
+            background: #0f0f0d; border-color: var(--accent);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            position: fixed; top: 50%; left: 50%; margin: 0;
+        }
+
+        .avatar-glow {
+            width: 90px; height: 90px; 
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(212, 175, 55, 0.2); transition: all 0.8s var(--fluid-curve);
             flex-shrink: 0;
         }
-        .toast-err-icon::after {
-            content: '!';
-            color: #ff453a;
-            font-size: 18px;
-            font-weight: 800;
+
+        .active .avatar-glow { width: 160px; height: 220px; margin-right: 35px; border: 1px solid var(--accent); }
+
+        .member-info-wrapper { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+
+        .member-name { 
+            font-family: 'Playfair Display', serif; font-weight: 900; font-style: italic; 
+            font-size: 1.4rem; margin: 15px 0 10px 0; color: #ffffff;
+        }
+        .active .member-name { font-size: 1.8rem; margin: 0; line-height: 1.1; }
+
+        .member-role { 
+            font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; 
+            color: var(--accent); font-weight: 800; 
+        }
+        .member-role::after { content: ""; display: block; width: 40px; height: 1px; background: var(--accent); margin: 6px 0; opacity: 0.5; }
+        .card:not(.active) .member-role::after { margin: 8px auto; width: 20%; }
+
+        .hidden-info { max-height: 0; overflow: hidden; opacity: 0; transition: all 0.5s ease; }
+        .active .hidden-info { max-height: 500px; opacity: 1; margin-top: 15px; }
+
+        .passport-section { margin-bottom: 12px; }
+        .passport-label { 
+            font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; 
+            color: var(--accent); opacity: 0.8; margin-bottom: 3px; font-weight: 800;
+        }
+        .passport-text { font-size: 0.8rem; color: #d1cdc3; line-height: 1.5; position: relative; }
+
+        #overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); 
+            opacity: 0; visibility: hidden; z-index: 999; transition: 0.5s;
+        }
+        #overlay.show { opacity: 1; visibility: visible; }
+
+        .easter-text { 
+            display: none; 
+            color: #fffaf0; 
+            font-style: italic;
+            text-shadow: 0 0 8px var(--easter-glow);
+            opacity: 0; transform: translateY(10px); 
+            transition: all 0.6s var(--fluid-curve);
         }
 
-        .toast-text-frame { display: flex; flex-direction: column; gap: 2px; }
-        .toast-title { color: #ffffff; font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
-        .toast-desc { color: #a1a1a6; font-size: 13px; font-weight: 400; line-height: 1.4; }
+        body.jose-easter .card-jose .easter-text,
+        body.nich-easter .card-nich .easter-text,
+        body.greg-easter .card-greg .easter-text { display: inline-block; opacity: 1; transform: translateY(0); }
 
-        @media (max-width: 768px) {
-            .pricing-grid { grid-template-columns: 1fr; gap: 40px; }
-            .pricing-card.pro-tier { transform: none; }
-            .pricing-card.pro-tier:hover { transform: translateY(-8px); }
-            .premium-toast { left: 16px; bottom: 16px; width: calc(100% - 32px); }
+        body.jose-easter .card-jose .normal-text,
+        body.nich-easter .card-nich .normal-text,
+        body.greg-easter .card-greg .normal-text { display: none; }
+
+        .settings-panel {
+            position: fixed; bottom: -450px; left: 20px; width: 260px;
+            background: rgba(15, 15, 12, 0.98); border: 1px solid var(--glass-border);
+            border-radius: 24px; padding: 25px; z-index: 1001; 
+            transition: 0.6s var(--fluid-curve);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .settings-panel.open { bottom: 20px; }
+        .panel-header { font-size: 0.65rem; color: var(--accent); margin-bottom: 15px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; border-bottom: 1px solid rgba(212,175,55,0.1); padding-bottom: 8px; }
+        
+        .switch-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .switch-name { font-size: 0.75rem; color: #fff; font-weight: 600; }
+        .master-row { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        .switch { position: relative; display: inline-block; width: 34px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #222; transition: .4s; border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px;
+            background-color: #666; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(14px); background-color: white; }
+
+        @media (max-width: 700px) {
+            .card.active { width: 90vw; height: auto; min-height: 400px; flex-direction: column; text-align: center; padding: 30px; }
+            .active .avatar-glow { margin: 0 0 20px 0; width: 130px; height: 170px; }
         }
     </style>
 </head>
-<body>
+<body> 
+    <div id="overlay"></div> 
 
-    <div id="checkoutToast" class="premium-toast">
-        <div class="toast-err-icon"></div>
-        <div class="toast-text-frame">
-            <span class="toast-title">Notice</span>
-            <span id="toastDescription" class="toast-desc">Checkout hasn't been implemented yet.</span>
+    <div id="tipToast" class="tip-toast">
+        <div class="tip-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </div>
+        <div class="tip-content">I-click ang mga card para sa detalye</div>
+        <div class="tip-close" onclick="closeToast()">✕</div>
+    </div>
+
+    <div class="site-bg-container">
+        <div class="site-bg" id="bg"></div>
+    </div>
+
+    <div class="title-section">
+        <div class="title-tag">Ang aming pagkakakilanlan</div>
+        <h1>Mga Utak ng Proyekto</h1>
+    </div>
+
+    <div class="secret-trigger" onclick="toggleSettings()">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 15.5A3.5 3.5 0 1 1 15.5 12 3.5 3.5 0 0 1 12 15.5Z"/></svg>
+    </div>
+
+    <div class="container">
+        <div class="card card-jose" onclick="toggleCard(this)">
+            <div class="avatar-glow">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#d4af37" stroke-width="1.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="member-info-wrapper">
+                <div class="member-name">Jose Charito A. Cortez III</div>
+                <div class="member-role">Punong Arkitekto</div>
+                <div class="hidden-info">
+                    <div class="passport-section">
+                        <div class="passport-label">Personal na Lathala</div>
+                        <div class="passport-text">
+                            <span class="normal-text">Siya ay isang tech wizard na may malalim na hilig sa matematika at lohika dahil sa kanyang pagnanais na matuto. Mahilig magkalikot ng PC at sumubok ng mga bagong experiment sa mundo ng coding sa pamamagitan ng pagbuo ng mga script.</span>
+                            <span class="easter-text" style="transition-delay: 0.1s;">Laging nakatutok at seryoso habang nakatitig sa screen ng computer niya dahil sa tindi ng kanyang konsentrasyon. Parang, siya ang tipo ng utak-isip, 'di ba? Pero kahit gaano karaming bug o pagkakamali sa lohika ang lumabas sa code niya, may isang bagay lang na hindi akma sa sistema. 'Yung tibok ng puso na nararamdaman ni Bria, alam mo na, ang eksepsiyon na sumisira sa lahat sa pamamagitan ng pag-overload sa kanyang damdamin. 💻 💓 🤫</span>
+                        </div>
+                    </div>
+                    <div class="passport-section">
+                        <div class="passport-label">Tungkulin sa Grupo</div>
+                        <div class="passport-text">
+                            <span class="normal-text">Siya ang tumatayong arkitekto ng site; bumuo ng logic sa pamamagitan ng mabusising pagsusulat ng code, nag-ayos ng disenyo, at tagapamahala ng ating GitHub repository dahil sa kanyang dedikasyon.</span>
+                            <span class="easter-text" style="transition-delay: 0.2s;">Sinisigurado niyang mananatiling matatag at maaasahan ang koneksyon ng website dahil sa husay niya sa pag-monitor. Parang pareho lang ang koneksyon nila at malakas. Sa tingin ko, puro coding lang ang nakukuha niya, wala nang iba. Pero kay Bria, iba, parang naiintindihan niya ang buong pattern ng pag-ibig o kung ano pa man sa pamamagitan ng pag-decode sa nararamdaman niya. Parang pareho lang ang nararamdaman. ✨ 🔗 ❤️</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-nich" onclick="toggleCard(this)">
+            <div class="avatar-glow">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#d4af37" stroke-width="1.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="member-info-wrapper">
+                <div class="member-name">Nichelle T. Mesiona</div>
+                <div class="member-role">Dalubhasa sa Pananaliksik</div>
+                <div class="hidden-info">
+                    <div class="passport-section">
+                        <div class="passport-label">Personal na Lathala</div>
+                        <div class="passport-text">
+                            <span class="normal-text">Isang masugid na TikTok enthusiast na laging naka-abang sa trending dahil sa kanyang hilig sa social media. Mahilig siyang tumuklas ng sining sa social media sa pamamagitan ng pag-explore sa iba't ibang trends.</span>
+                            <span class="easter-text" style="transition-delay: 0.1s;">Ang resident TikTok queen na tila hindi napapagod mag-scroll dahil sa bawat post ni Lewis. Pero sa libu-libong fyp videos, iisang notification lang ang hinihintay niya. Ang bawat ngiti sa screen ay para sa kanyang ultimate inspiration... si Lewis na napapasaya niya sa pamamagitan ng kanyang walang sawang pag-support! ✨</span>
+                        </div>
+                    </div>
+                    <div class="passport-section">
+                        <div class="passport-label">Tungkulin sa Grupo</div>
+                        <div class="passport-text">
+                            <span class="normal-text">Nakatalaga sa paghahanap ng mga datos sa pamamagitan ng malalim na pagsusuri at pagtiyak na tama ang bawat impormasyong inilalagay sa website dahil sa kanyang pagiging metikulosa.</span>
+                            <span class="easter-text" style="transition-delay: 0.2s;">Expert sa pag-verify ng facts, pero pagdating sa puso niya, "verified" na ang kilig tuwing nababanggit ang kanyang "friend" dahil sa espesyal na ugnayan nila na pinapatibay niya sa pamamagitan ng bawat chat at sulyap. 🤫 💖</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-greg" onclick="toggleCard(this)">
+            <div class="avatar-glow">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#d4af37" stroke-width="1.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="member-info-wrapper">
+                <div class="member-name">Gregory Kim C. Aquino</div>
+                <div class="member-role">Tagapangalaga ng Sining</div>
+                <div class="hidden-info">
+                    <div class="passport-section">
+                        <div class="passport-label">Personal na Lathala</div>
+                        <div class="passport-text">
+                            <span class="normal-text">Ang visual guy ng tropa na laging game humataw sa dance floor dahil sa kanyang likas na talento. Isang mahusay na badminton player na puno ng liksi at enerhiya sa pamamagitan ng disiplina sa pag-eensayo.</span>
+                            <span class="easter-text" style="transition-delay: 0.1s;">Hataw sa dance floor at sa badminton court, pero kahit gaano kabilis ang smash, hindi makatakas sa mga banat ni crush dahil sa sobrang kilig na nararamdaman. Mahilig tumingin sa salamin para mag-ayos sa pamamagitan ng pag-aayos ng kanyang buhok, pero ang tanging "reflection" na gusto niyang makita ay ang ngiti ni Miranda.</span>
+                        </div>
+                    </div>
+                    <div class="passport-section">
+                        <div class="passport-label">Tungkulin sa Grupo</div>
+                        <div class="passport-text">
+                            <span class="normal-text">Siya ang pumipili ng mga tamang larawan sa pamamagitan ng pag-curate ng visuals at elements upang maging kaaya-aya ang itsura ng buong site dahil sa kanyang masining na mata.</span>
+                            <span class="easter-text" style="transition-delay: 0.2s;">Laging handa sa court, pero si Miranda lang ang nag-iisang "match" ng puso niya dahil sa hindi maipaliwanag na koneksyon. Sinisiguro niyang perfect ang visuals sa pamamagitan ng pag-edit nang maigi, kasing-linaw ng bawat sulyap niya sa kanya. 😉 ❤️</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="gradient-wrapper">
-        <div class="container animate-popup">
-            
-            <h1 class="page-title">Simple, Flexible Pricing</h1>
-            <p class="page-subtitle">Choose the plan that matches your project requirements and development scale.</p>
-
-            <div class="pricing-grid">
-                
-                <div class="pricing-card starter-tier">
-                    <div class="best-for-badge">Best for Learners</div>
-                    <h3 class="plan-name">Starter Plan</h3>
-                    <div class="plan-price">$0 <span>/ forever</span></div>
-                    <ul class="plan-features-short">
-                        <li>Up to 2 active projects</li>
-                        <li>Standard layout generation</li>
-                        <li>Basic web code export</li>
-                        <li>Community tech support</li>
-                    </ul>
-                    <button class="checkout-btn" onclick="showToast('Starter Plan')">Proceed to Checkout</button>
-                </div>
-
-                <div class="pricing-card pro-tier">
-                    <div class="best-for-badge">Best for Students &amp; Creators</div>
-                    <h3 class="plan-name">Pro Plan</h3>
-                    <div class="plan-price">$15 <span>/ month</span></div>
-                    <ul class="plan-features-short">
-                        <li>Unlimited active projects</li>
-                        <li>Instant layouts &amp; frameworks</li>
-                        <li>Advanced system structures</li>
-                        <li>Standard custom domains</li>
-                        <li>24/7 priority support</li>
-                    </ul>
-                    <button class="checkout-btn" onclick="showToast('Pro Plan')">Proceed to Checkout</button>
-                </div>
-
-                <div class="pricing-card team-tier">
-                    <div class="best-for-badge">Best for Group Work</div>
-                    <h3 class="plan-name">Team Plan</h3>
-                    <div class="plan-price">$49 <span>/ month</span></div>
-                    <ul class="plan-features-short">
-                        <li>Everything in Pro plan</li>
-                        <li>Collaborative cloud editing</li>
-                        <li>Shared asset database</li>
-                        <li>Full analytical tools</li>
-                    </ul>
-                    <button class="checkout-btn" onclick="showToast('Team Plan')">Proceed to Checkout</button>
-                </div>
-
-            </div>
-
-            <h2 class="section-title">Compare All Plan Features</h2>
-            <div class="checklist-table-wrapper">
-                <table class="checklist-table">
-                    <thead>
-                        <tr>
-                            <th>Metric / Feature</th>
-                            <th>Starter</th>
-                            <th>Pro</th>
-                            <th>Team</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Maximum Active Projects</td>
-                            <td>2 Projects</td>
-                            <td>Unlimited</td>
-                            <td>Unlimited</td>
-                        </tr>
-                        <tr>
-                            <td>Layout Automation Engine</td>
-                            <td><span class="check-icon starter-check">✓</span> Standard</td>
-                            <td><span class="check-icon pro-check">✓</span> Advanced</td>
-                            <td><span class="check-icon team-check">✓</span> Advanced</td>
-                        </tr>
-                        <tr>
-                            <td>Cloud Storage Capability</td>
-                            <td>500 MB</td>
-                            <td>10 GB</td>
-                            <td>50 GB</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <footer class="site-footer">
-                <p>&copy; 2026 Forma. Engineered by ItzNotZombi3. All rights reserved.</p>
-            </footer>
-
+    <div class="settings-panel" id="settingsPanel">
+        <div class="panel-header">System Status</div>
+        <div class="switch-row">
+            <span class="switch-name">CORE_ID: JCAC</span>
+            <label class="switch"><input type="checkbox" id="sw-jose" onchange="updateMember('jose', this.checked)"><span class="slider"></span></label>
+        </div>
+        <div class="switch-row">
+            <span class="switch-name">CORE_ID: NTM</span>
+            <label class="switch"><input type="checkbox" id="sw-nich" onchange="updateMember('nich', this.checked)"><span class="slider"></span></label>
+        </div>
+        <div class="switch-row">
+            <span class="switch-name">CORE_ID: GKCA</span>
+            <label class="switch"><input type="checkbox" id="sw-greg" onchange="updateMember('greg', this.checked)"><span class="slider"></span></label>
+        </div>
+        <div class="switch-row master-row">
+            <span class="switch-name" style="color: var(--accent);">SYNC_GLOBAL</span>
+            <label class="switch"><input type="checkbox" id="sw-master" onchange="toggleMaster(this.checked)"><span class="slider"></span></label>
         </div>
     </div>
 
     <script>
-        function showToast(planName) {
-            const toast = document.getElementById('checkoutToast');
-            const desc = document.getElementById('toastDescription');
-            desc.textContent = `${planName} checkout hasn't been implemented yet.`;
-            
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 4000);
-        }
-    </script>
+        const APP_CONFIG = {
+            joseDefault: false,
+            nichDefault: false,
+            gregDefault: false,
+            masterDefault: false
+        };
 
+        const overlay = document.getElementById('overlay');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const toast = document.getElementById('tipToast');
+        let activeCard = null;
+        let placeholder = document.createElement('div');
+
+        function showToast() {
+            setTimeout(() => {
+                toast.classList.add('show');
+                setTimeout(closeToast, 6000);
+            }, 2000);
+        }
+
+        function closeToast() {
+            toast.classList.remove('show');
+        }
+
+        function toggleSettings() {
+            settingsPanel.classList.toggle('open');
+        }
+
+        function updateMember(name, isChecked) {
+            if (isChecked) { 
+                document.body.classList.add(name + '-easter'); 
+            } else { 
+                document.body.classList.remove(name + '-easter'); 
+                document.getElementById('sw-master').checked = false;
+            }
+        }
+
+        function toggleMaster(isFullMode) {
+            ['jose', 'nich', 'greg'].forEach(m => {
+                document.getElementById('sw-' + m).checked = isFullMode;
+                if (isFullMode) document.body.classList.add(m + '-easter');
+                else document.body.classList.remove(m + '-easter');
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            const bg = document.getElementById('bg');
+            if(bg) bg.style.transform = `translateY(${window.pageYOffset * 0.01}px)`;
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            showToast();
+            document.getElementById('sw-jose').checked = APP_CONFIG.joseDefault;
+            document.getElementById('sw-nich').checked = APP_CONFIG.nichDefault;
+            document.getElementById('sw-greg').checked = APP_CONFIG.gregDefault;
+            document.getElementById('sw-master').checked = APP_CONFIG.masterDefault;
+            
+            if(APP_CONFIG.masterDefault) toggleMaster(true);
+            else {
+                updateMember('jose', APP_CONFIG.joseDefault);
+                updateMember('nich', APP_CONFIG.nichDefault);
+                updateMember('greg', APP_CONFIG.gregDefault);
+            }
+
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('reveal');
+                    setTimeout(() => card.classList.add('do-sweep'), 600);
+                }, 400 + (index * 200)); 
+            });
+        });
+
+        function toggleCard(card) {
+            if (card.classList.contains('active')) return;
+            closeToast();
+            activeCard = card;
+            const first = card.getBoundingClientRect();
+            placeholder.style.width = first.width + 'px';
+            placeholder.style.height = first.height + 'px';
+            card.after(placeholder);
+            card.classList.add('active');
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            const last = card.getBoundingClientRect();
+            const invertX = first.left - last.left;
+            const invertY = first.top - last.top;
+            const invertScaleW = first.width / last.width;
+            const invertScaleH = first.height / last.height;
+            card.style.transition = 'none'; 
+            card.style.transform = `translate(${invertX}px, ${invertY}px) scale(${invertScaleW}, ${invertScaleH})`;
+            requestAnimationFrame(() => {
+                card.style.transition = 'transform 0.8s var(--fluid-curve), background 0.4s, width 0.8s, height 0.8s, padding 0.8s';
+                card.style.transform = 'translate(-50%, -50%) scale(1, 1)';
+            });
+        }
+
+        function closeActiveCard() {
+            if (!activeCard) return;
+            activeCard.classList.remove('active');
+            activeCard.style.transform = '';
+            overlay.classList.remove('show');
+            placeholder.remove();
+            document.body.style.overflow = 'auto';
+            activeCard = null;
+            settingsPanel.classList.remove('open');
+        }
+        overlay.onclick = closeActiveCard;
+
+        window.addEventListener('click', (e) => {
+            if (!settingsPanel.contains(e.target) && !e.target.closest('.secret-trigger')) {
+                settingsPanel.classList.remove('open');
+            }
+        });
+    </script>
 </body>
 </html>
