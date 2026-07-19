@@ -31,7 +31,6 @@
             min-height: 100vh;
         }
 
-        /* 🖼 BACKGROUND LAYER */
         body::after {
             content: '';
             position: fixed;
@@ -91,7 +90,6 @@
             line-height: 1.5;
         }
 
-        /* 🔲 PRICING TILES */
         .pricing-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -185,7 +183,6 @@
         .team-tier .checkout-btn { background: rgba(157, 78, 221, 0.15); border: 1px solid #9d4ede; color: #b771f4; }
         .team-tier .checkout-btn:hover { background: #9d4ede; color: #fff; }
 
-        /* 📊 FEATURES TABLE */
         .section-title { font-size: 24px; font-weight: 700; margin: 50px 0 25px 0; letter-spacing: -0.01em; }
         .checklist-table-wrapper {
             width: 100%;
@@ -208,7 +205,6 @@
         .team-check { color: #9d4ede; }
         .dash-icon { color: #48484a; }
 
-        /* 📑 FAQS */
         .faq-section { width: 100%; max-width: 750px; margin-bottom: 40px; }
         .faq-item {
             background: rgba(255, 255, 255, 0.03);
@@ -223,32 +219,29 @@
         .site-footer { width: 100%; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 30px; margin-top: 40px; text-align: center; }
         .site-footer p { font-size: 13px; color: #8E8E93; font-weight: 500; }
 
-        /* 📦 STATIC SINGLE-INSTANCE NOTIFICATION CONTAINER (From Previous Project Layout) */
+        /* TOAST STYLE BLOCK FROM BASELINE REFERENCED LAYOUT */
         .premium-toast {
-            position: fixed;
-            top: 24px;
-            right: 24px; /* Anchored to the right side window boundary */
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
             width: 310px;
             background: rgba(18, 18, 24, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.14);
             border-radius: 16px;
-            padding: 16px 44px 16px 16px; /* Right-hand inner padding clears text away from circle close icon */
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             gap: 14px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            z-index: 2147483647;
-            
-            /* Hidden by default, animated transitioning from the Right edge */
+            z-index: 1000;
             opacity: 0;
-            transform: translateX(60px);
+            transform: translateX(-40px);
             pointer-events: none;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
 
-        /* Visibility Trigger State */
         .premium-toast.show {
             opacity: 1;
             transform: translateX(0);
@@ -277,56 +270,22 @@
         .toast-title { color: #ffffff; font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
         .toast-desc { color: #a1a1a6; font-size: 13px; font-weight: 400; line-height: 1.4; }
 
-        /* 🔘 CIRCULAR BUTTON (Stays within the notification rectangle bounding box) */
-        .toast-close-btn {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%; /* Perfect Circle Shape */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .toast-close-btn::after {
-            content: '✕';
-            color: #a1a1a6;
-            font-size: 10px;
-            font-weight: 700;
-        }
-        .toast-close-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        .toast-close-btn:hover::after {
-            color: #ffffff;
-        }
-
         @media (max-width: 768px) {
             .pricing-grid { grid-template-columns: 1fr; gap: 40px; }
             .pricing-card.pro-tier { transform: none; }
             .pricing-card.pro-tier:hover { transform: translateY(-8px); }
-            .premium-toast { right: 16px; top: 16px; width: calc(100% - 32px); }
+            .premium-toast { left: 16px; bottom: 16px; width: calc(100% - 32px); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Static Integrated HTML Component Structure from your baseline project -->
     <div id="checkoutToast" class="premium-toast">
         <div class="toast-err-icon"></div>
         <div class="toast-text-frame">
             <span class="toast-title">Notice</span>
             <span id="toastDescription" class="toast-desc">Checkout hasn't been implemented yet.</span>
         </div>
-        <!-- Circular closing interface node placed inside the border rect -->
-        <div class="toast-close-btn" onclick="closeToast()"></div>
     </div>
 
     <div class="gradient-wrapper">
@@ -336,7 +295,7 @@
             <p class="page-subtitle">Choose the plan that matches your project requirements and development scale.</p>
 
             <div class="pricing-grid">
-                <!-- Starter -->
+                
                 <div class="pricing-card starter-tier">
                     <div class="best-for-badge">Best for Learners</div>
                     <h3 class="plan-name">Starter Plan</h3>
@@ -350,7 +309,6 @@
                     <button class="checkout-btn" onclick="showToast('Starter Plan')">Proceed to Checkout</button>
                 </div>
 
-                <!-- Pro -->
                 <div class="pricing-card pro-tier">
                     <div class="best-for-badge">Best for Students &amp; Creators</div>
                     <h3 class="plan-name">Pro Plan</h3>
@@ -365,7 +323,6 @@
                     <button class="checkout-btn" onclick="showToast('Pro Plan')">Proceed to Checkout</button>
                 </div>
 
-                <!-- Team -->
                 <div class="pricing-card team-tier">
                     <div class="best-for-badge">Best for Group Work</div>
                     <h3 class="plan-name">Team Plan</h3>
@@ -378,9 +335,9 @@
                     </ul>
                     <button class="checkout-btn" onclick="showToast('Team Plan')">Proceed to Checkout</button>
                 </div>
+
             </div>
 
-            <!-- COMPARISON TABLE -->
             <h2 class="section-title">Compare All Plan Features</h2>
             <div class="checklist-table-wrapper">
                 <table class="checklist-table">
@@ -422,39 +379,17 @@
         </div>
     </div>
 
-    <!-- ⚡ SIMPLIFIED CORE TOGGLE LOGIC (Skipping Dynamic Queues Entirely) -->
     <script>
-        let autoCloseTimer = null;
-
         function showToast(planName) {
             const toast = document.getElementById('checkoutToast');
             const desc = document.getElementById('toastDescription');
-            
-            // Set context content safely
             desc.textContent = `${planName} checkout hasn't been implemented yet.`;
             
-            // Reset active countdown timers if a button is pressed while open
-            if (autoCloseTimer) {
-                clearTimeout(autoCloseTimer);
-            }
-
-            // Apply visibility layout transition class
             toast.classList.add('show');
-
-            // Setup strict 3-second auto-close window (3000ms)
-            autoCloseTimer = setTimeout(() => {
-                closeToast();
-            }, 3000);
-        }
-
-        function closeToast() {
-            const toast = document.getElementById('checkoutToast');
-            toast.classList.remove('show');
             
-            if (autoCloseTimer) {
-                clearTimeout(autoCloseTimer);
-                autoCloseTimer = null;
-            }
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
         }
     </script>
 
